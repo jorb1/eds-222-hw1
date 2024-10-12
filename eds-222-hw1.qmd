@@ -2,6 +2,8 @@
 title: "EDS 222: Homework 1"
 date: Due 10/14
 author: Bailey Jorgensen
+editor_options: 
+  chunk_output_type: inline
 ---
 
 ## Background
@@ -33,16 +35,73 @@ crowdsourced <- readRDS(file.path("data", "airpol-PK-crowdsourced.RDS"))
 govt <- readRDS(file.path("data", "airpol-PK-govt.RDS"))
 ```
 
+```{r, output = FALSE}
+# Load libraries
+library(here)
+library(tidyverse)
+```
+
+```{r, output = FALSE}
+# Read in files and name them as instructed
+crowdsourced <- readRDS(file.path("data", "airpol-PK-crowdsourced.RDS"))
+govt <- readRDS(file.path("data", "airpol-PK-govt.RDS"))
+```
+
 ::: callout-warning
 There's an implicit assumption about file organization in the code above. What is it? How can you make the code work?
+
+\# A similar filepath structure works with the here library installed. I've never seen the \`file.path\` function used before, however. Nor I have I used an RDS file before.
 :::
 
 1.  These dataframes have one row per pollution observation. How many pollution records are in each dataset?
+
+```{r}
+# This show that there are 5488 rows and four columns in the crowdsourced dataframe, meaning there are 5488 pollution observations
+
+dim(crowdsourced)
+
+# This shows that there are 1960 rows and 4 columns in the govt dataframe, meaning that there are 1960 pollution observations
+dim(govt)
+```
+
 2.  Each monitor is located at a unique latitude and longitude location. How many unique monitors are in each dataset?
+
+```{r}
+# This asks for the unique values of both the latitude and longitude together by indexing into the dataframe, and then calling two column names
+
+unique(crowdsourced[c("longitude", "latitude")])
+```
 
 ::: callout-tip
 `group_by(longitude,latitude)` and `cur_group_id()` in `dplyr` will help in creating a unique identifier for each (longitude, latitude) pair.
+
+NOTE: I saw the group_by() and cur_group_id() homework hints after I had already made the above code. So, I kept it but played around with these two functions too. Below is what I came up with.
+
+Both sets of code show that there are 14 unique lat and long combinations, so 14 different monitors. Is one set of code better or more accurate than the other?
+
+```{r}
+unique_monitors_cs <- crowdsourced |>
+  group_by(latitude, longitude) |>
+  mutate(unique_id = cur_group_id())
+
+length(unique(unique_monitors_cs[["unique_id"]]))
+                        
+```
 :::
+
+```{r}
+# Now, I will do the same code for the government dataframe
+
+unique(govt[c("longitude", "latitude")])
+```
+
+```{r}
+unique_monitors_govt <- govt |>
+  group_by(latitude, longitude) |>
+  mutate(unique_govt_id = cur_group_id())
+
+length(unique(unique_monitors_govt[["unique_govt_id"]]))
+```
 
 ### Question 2
 
