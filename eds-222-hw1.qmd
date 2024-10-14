@@ -109,15 +109,37 @@ The goal of pollution monitoring in Lahore is to measure the average pollution c
 
 1.  What is the *population* in this setting? Please be precise.
 
+    The population could be thought of as the actual amount of PM in the air of the city.
+
 2.  What are the *samples* in this setting? Please be precise.
 
+    The samples are points of data within the population that were collected at certain areas. They are not the totality of PM in the air, since that is impossible to measure. But, hopefully, they represent enough of the PM at a variety of points that the population measurements can be extrapolated from the sample data.
+
 3.  These samples were not randomly collected from across locations in Lahore. Given the sampling approaches described above, discuss possible biases that may enter when we use these samples to construct estimates of population parameters.
+
+    Though the goal of the crowdsourced data is to compare and try to find bias in the government data, the opposite could also be true, where citizens place sensors in particularly dirty air areas, leading to bias in the opposite direction. In addition, the sample bias could be introduced in both sets based on the people who are willing to have sensors placed in their homes. Either way, when constructing estimates of population parameters, these biases should be kept in mind.
 
 ### Question 3
 
 1.  For both the government data and the crowd-sourced data, report the sample mean, sample minimum, and sample maximum value of PM 2.5 (measured in $\mu g/m^3$).
-2.  Discuss any key differences that you see between these two samples.
-3.  Are the differences in mean pollution as expected, given what we know about the sampling strategies?
+
+```{r}
+
+crowdsourced_mean <- mean(crowdsourced$PM)
+print(crowdsourced_mean)
+
+govt_mean <- mean(govt$PM)
+print(govt_mean)
+
+```
+
+1.  Discuss any key differences that you see between these two samples.
+
+The mean air pollution concentration measured in $\mu g/m^3$ is much higher in the crowd-sourced data versus the government collected data.
+
+1.  Are the differences in mean pollution as expected, given what we know about the sampling strategies?
+
+This could be expected, based on the bias likely introduced into both samples given who was collecting them and for what purposes.
 
 ### Question 4
 
