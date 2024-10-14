@@ -199,8 +199,8 @@ Second, create a *stratified random sample*. Do so by (i) stratifying your poole
 ```{r}
 stratified <- random_sample %>%
   mutate(rounded = round(latitude, 2)) %>%  
-  group_by(rounded) %>%                     
-  slice_sample(n = 200)                         
+  group_by(rounded) %>%
+  slice_sample(n = 200) 
 
 ```
 
@@ -208,3 +208,11 @@ stratified <- random_sample %>%
 #### Question 6.2
 
 Compare estimated means of PM 2.5 for each sampling strategy to the NASA estimate of 89.2 $\mu g/m^3$. Which sample seems to match the satellite data best? What would you recommend the Prime Minister do? Does your proposed sampling strategy rely more on government or on crowd-sourced data? Why might that be the case?
+
+```{r}
+mean(stratified$PM)
+mean(random_sample$PM)
+mean(govt$PM)
+mean(crowdsourced$PM)
+```
+The means of the PM for each sampling strategy utilizing both the government and the crowd-sourced data are lower than the NASA data, as well as the original crowd-sourced data. The stratified sampling strategy is the closest to the NASA estimate. I would advise that the Prime Minister rely more on the stratified data, which depends more on the crowd-sourced data since that data spans more latitudes. 
