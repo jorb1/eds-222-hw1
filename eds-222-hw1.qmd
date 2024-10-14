@@ -109,15 +109,15 @@ The goal of pollution monitoring in Lahore is to measure the average pollution c
 
 1.  What is the *population* in this setting? Please be precise.
 
-    The population could be thought of as the actual amount of PM in the air of the city.
+**The population could be thought of as the actual amount of PM in the air of the city.**
 
 2.  What are the *samples* in this setting? Please be precise.
 
-    The samples are points of data within the population that were collected at certain areas. They are not the totality of PM in the air, since that is impossible to measure. But, hopefully, they represent enough of the PM at a variety of points that the population measurements can be extrapolated from the sample data.
+**The samples are points of data within the population that were collected at certain areas. They are not the totality of PM in the air, since that is impossible to measure. But, hopefully, they represent enough of the PM at a variety of points that the population measurements can be extrapolated from the sample data.**
 
 3.  These samples were not randomly collected from across locations in Lahore. Given the sampling approaches described above, discuss possible biases that may enter when we use these samples to construct estimates of population parameters.
 
-    Though the goal of the crowdsourced data is to compare and try to find bias in the government data, the opposite could also be true, where citizens place sensors in particularly dirty air areas, leading to bias in the opposite direction. In addition, the sample bias could be introduced in both sets based on the people who are willing to have sensors placed in their homes. Either way, when constructing estimates of population parameters, these biases should be kept in mind.
+**Though the goal of the crowd-sourced data is to compare and try to find bias in the government data, the opposite could also be true, where citizens place sensors in particularly dirty air areas, leading to bias in the opposite direction. In addition, the sample bias could be introduced in both sets based on the people who are willing to have sensors placed in their homes. Either way, when constructing estimates of population parameters, these biases should be kept in mind.**
 
 ### Question 3
 
@@ -135,11 +135,11 @@ print(govt_mean)
 
 1.  Discuss any key differences that you see between these two samples.
 
-The mean air pollution concentration measured in $\mu g/m^3$ is much higher in the crowd-sourced data versus the government collected data.
+**The mean air pollution concentration measured in $\mu g/m^3$ is much higher in the crowd-sourced data versus the government collected data.**
 
-1.  Are the differences in mean pollution as expected, given what we know about the sampling strategies?
+2.  Are the differences in mean pollution as expected, given what we know about the sampling strategies?
 
-This could be expected, based on the bias likely introduced into both samples given who was collecting them and for what purposes.
+**This could be expected, based on the bias likely introduced into both samples given who was collecting them and for what purposes.**
 
 ### Question 4
 
@@ -149,9 +149,27 @@ Use the location of the air pollution stations for both of the sampling strategi
 `longitude` indicates location in the *x*-direction, while `latitude` indicates location in the *y*-direction. With `ggplot2` this should be nothing fancy. We'll do more spatial data in `R` later in the course.
 :::
 
+```{r}
+# First I will add a column for each dataset that indicates if it is govt or crowdsourced
+crowdsourced$source <- ("crowdsourced")
+govt$source <- ("govt")
+
+# Then I will join the two datasets
+all_data <- full_join(crowdsourced, govt)
+```
+
+```{r}
+# Then I will create a plot indicating location, with points colored by source of dat
+ggplot(data = all_data,aes(x = longitude, y = latitude, color = source)) +
+  geom_point() +
+  theme_bw()
+```
+
 ### Question 5
 
 The local newspaper in Pakistan, *Dawn*, claims that the government is misreporting the air pollution levels in Lahore. Do the locations of monitors in question 4, relative to crowd-sourced monitors, suggest anything about a possible political bias?
+
+**According to our plot, it does seem that the government sensors are clustered in one location, while the crowd-sourced sensors are more widely and evenly distributed. This seems to indicate that the government samples have more location bias.**
 
 ### Question 6
 
@@ -163,11 +181,29 @@ NASA's satellite data indicates that the average PM across Lahore is 89.2 $\mu g
 
 First, generate a *random sample* of size $n=1000$ air pollution records by (i) pooling observations across the government and the crowd-sourced data; and (ii) drawing observations at random from this pooled sample.
 
+```{r}
+# To do this, I believe I can use the full join of the datasets that I already made earlier
+# The below code will generate a random sample, sampling from the rows specifically, with no repeats
+
+random_sample <- all_data[sample(nrow(all_data), 1000, replace = FALSE), ]
+
+```
+
+
 ::: callout-tip
 `bind_rows()` may be helpful.
 :::
 
 Second, create a *stratified random sample*. Do so by (i) stratifying your pooled data-set into strata of 0.01 degrees of latitude, and (ii) randomly sampling 200 air pollution observations from each stratum.
+
+```{r}
+stratified <- random_sample %>%
+  mutate(rounded = round(latitude, 2)) %>%  
+  group_by(rounded) %>%                     
+  slice_sample(n = 200)                         
+
+```
+
 
 #### Question 6.2
 
