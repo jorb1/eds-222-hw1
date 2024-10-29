@@ -294,11 +294,11 @@ Tip
 <ol type="1">
 <li>What is the <em>population</em> in this setting? Please be precise.</li>
 </ol>
-<p><strong>The population could be thought of as the actual amount of PM in the air of the city.</strong></p>
+<p><strong>The population could be thought of as the actual amount of PM in the air of the city from November 4th 2018 to November 30th 2019.</strong></p>
 <ol start="2" type="1">
 <li>What are the <em>samples</em> in this setting? Please be precise.</li>
 </ol>
-<p><strong>The samples are points of data within the population that were collected at certain areas. They are not the totality of PM in the air, since that is impossible to measure. But, hopefully, they represent enough of the PM at a variety of points that the population measurements can be extrapolated from the sample data.</strong></p>
+<p><strong>The samples in this setting are the air quality measurements collected from both crowdsourced and government sourced air monitors from November 4th 2018 and November 30th 2019.</strong></p>
 <ol start="3" type="1">
 <li>These samples were not randomly collected from across locations in Lahore. Given the sampling approaches described above, discuss possible biases that may enter when we use these samples to construct estimates of population parameters.</li>
 </ol>
@@ -324,11 +324,11 @@ Tip
 <ol type="1">
 <li>Discuss any key differences that you see between these two samples.</li>
 </ol>
-<p><strong>The mean air pollution concentration measured in <span class="math inline">\(\mu g/m^3\)</span> is much higher in the crowd-sourced data versus the government collected data.</strong></p>
+<p><strong>The mean air pollution concentration measured in</strong> <span class="math inline">\(\mu g/m^3\)</span> is much higher in the crowd-sourced data versus the government collected data.</p>
 <ol start="2" type="1">
 <li>Are the differences in mean pollution as expected, given what we know about the sampling strategies?</li>
 </ol>
-<p><strong>This could be expected, based on the bias likely introduced into both samples given who was collecting them and for what purposes.</strong></p>
+<p><strong>This could be expected, based on the bias likely introduced into both samples given who was collecting them and for what purposes. Biases could arise in the crowd sourced data due to the type of people willing to participate as well as skill in using monitors. The government data could be biased because the monitors could be placed in certain areas in order to make the air quality look better than it actually is.</strong></p>
 </section>
 <section id="question-4" class="level3">
 <h3 class="anchored" data-anchor-id="question-4">Question 4</h3>
@@ -387,7 +387,32 @@ Tip
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># To do this, I believe I can use the full join of the datasets that I already made earlier</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="co"># The below code will generate a random sample, sampling from the rows specifically, with no repeats</span></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>random_sample <span class="ot">&lt;-</span> all_data[<span class="fu">sample</span>(<span class="fu">nrow</span>(all_data), <span class="dv">1000</span>, <span class="at">replace =</span> <span class="cn">FALSE</span>), ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4321</span>)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>random_sample <span class="ot">&lt;-</span> all_data[<span class="fu">sample</span>(<span class="fu">nrow</span>(all_data), <span class="dv">1000</span>, <span class="at">replace =</span> <span class="cn">FALSE</span>), ]</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>kableExtra<span class="sc">::</span><span class="fu">kable</span>(random_sample <span class="sc">|&gt;</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">group_by</span>(source) <span class="sc">|&gt;</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">count</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">source</th>
+<th style="text-align: right;">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">crowdsourced</td>
+<td style="text-align: right;">728</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">govt</td>
+<td style="text-align: right;">272</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -416,11 +441,11 @@ Tip
 <div class="cell">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(stratified<span class="sc">$</span>PM)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 65.2227</code></pre>
+<pre><code>[1] 65.96329</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(random_sample<span class="sc">$</span>PM)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 63.1</code></pre>
+<pre><code>[1] 62.59</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(govt<span class="sc">$</span>PM)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -431,7 +456,7 @@ Tip
 <pre><code>[1] 70.2008</code></pre>
 </div>
 </div>
-<p>The means of the PM for each sampling strategy utilizing both the government and the crowd-sourced data are lower than the NASA data, as well as the original crowd-sourced data. The stratified sampling strategy is the closest to the NASA estimate. I would advise that the Prime Minister rely more on the stratified data, which depends more on the crowd-sourced data since that data spans more latitudes.</p>
+<p>The means of the PM for each sampling strategy utilizing both the government and the crowd-sourced data are lower than the NASA data, as well as the original crowd-sourced data. The stratified sampling strategy is the closest to the NASA estimate. I would advise that the Prime Minister rely more on the stratified data, which depends more on the crowd-sourced data since that data spans more latitudes. The stratified sample covers the latitudes of the city more evenly than the random sample. The data source for the stratified sampling dataset samples every .01 degrees of latitude.</p>
 </section>
 </section>
 </section>

@@ -109,11 +109,11 @@ The goal of pollution monitoring in Lahore is to measure the average pollution c
 
 1.  What is the *population* in this setting? Please be precise.
 
-**The population could be thought of as the actual amount of PM in the air of the city.**
+**The population could be thought of as the actual amount of PM in the air of the city from November 4th 2018 to November 30th 2019.**
 
 2.  What are the *samples* in this setting? Please be precise.
 
-**The samples are points of data within the population that were collected at certain areas. They are not the totality of PM in the air, since that is impossible to measure. But, hopefully, they represent enough of the PM at a variety of points that the population measurements can be extrapolated from the sample data.**
+**The samples in this setting are the air quality measurements collected from both crowdsourced and government sourced air monitors from November 4th 2018 and November 30th 2019.**
 
 3.  These samples were not randomly collected from across locations in Lahore. Given the sampling approaches described above, discuss possible biases that may enter when we use these samples to construct estimates of population parameters.
 
@@ -135,11 +135,11 @@ print(govt_mean)
 
 1.  Discuss any key differences that you see between these two samples.
 
-**The mean air pollution concentration measured in $\mu g/m^3$ is much higher in the crowd-sourced data versus the government collected data.**
+**The mean air pollution concentration measured in** $\mu g/m^3$ is much higher in the crowd-sourced data versus the government collected data.
 
 2.  Are the differences in mean pollution as expected, given what we know about the sampling strategies?
 
-**This could be expected, based on the bias likely introduced into both samples given who was collecting them and for what purposes.**
+**This could be expected, based on the bias likely introduced into both samples given who was collecting them and for what purposes. Biases could arise in the crowd sourced data due to the type of people willing to participate as well as skill in using monitors. The government data could be biased because the monitors could be placed in certain areas in order to make the air quality look better than it actually is.**
 
 ### Question 4
 
@@ -185,10 +185,13 @@ First, generate a *random sample* of size $n=1000$ air pollution records by (i) 
 # To do this, I believe I can use the full join of the datasets that I already made earlier
 # The below code will generate a random sample, sampling from the rows specifically, with no repeats
 
+set.seed(4321)
 random_sample <- all_data[sample(nrow(all_data), 1000, replace = FALSE), ]
 
+kableExtra::kable(random_sample |>
+                    group_by(source) |>
+                    count())
 ```
-
 
 ::: callout-tip
 `bind_rows()` may be helpful.
@@ -204,7 +207,6 @@ stratified <- random_sample %>%
 
 ```
 
-
 #### Question 6.2
 
 Compare estimated means of PM 2.5 for each sampling strategy to the NASA estimate of 89.2 $\mu g/m^3$. Which sample seems to match the satellite data best? What would you recommend the Prime Minister do? Does your proposed sampling strategy rely more on government or on crowd-sourced data? Why might that be the case?
@@ -215,4 +217,5 @@ mean(random_sample$PM)
 mean(govt$PM)
 mean(crowdsourced$PM)
 ```
-The means of the PM for each sampling strategy utilizing both the government and the crowd-sourced data are lower than the NASA data, as well as the original crowd-sourced data. The stratified sampling strategy is the closest to the NASA estimate. I would advise that the Prime Minister rely more on the stratified data, which depends more on the crowd-sourced data since that data spans more latitudes. 
+
+The means of the PM for each sampling strategy utilizing both the government and the crowd-sourced data are lower than the NASA data, as well as the original crowd-sourced data. The stratified sampling strategy is the closest to the NASA estimate. I would advise that the Prime Minister rely more on the stratified data, which depends more on the crowd-sourced data since that data spans more latitudes. The stratified sample covers the latitudes of the city more evenly than the random sample. The data source for the stratified sampling dataset samples every .01 degrees of latitude.
